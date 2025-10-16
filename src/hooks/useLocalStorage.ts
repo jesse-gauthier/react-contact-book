@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { StorageError } from '../types';
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { StorageError } from "../types";
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void, StorageError] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, (value: T | ((prev: T) => T)) => void, StorageError] {
   const isFirstLoadRef = useRef(true);
   const [state, setState] = useState<T>(initialValue);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -18,7 +21,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
         window.localStorage.setItem(key, JSON.stringify(initialValue));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to read localStorage');
+      setError(e instanceof Error ? e.message : "Failed to read localStorage");
       // keep initialValue in memory but avoid overwriting possibly corrupt data
     } finally {
       isFirstLoadRef.current = false;
@@ -27,13 +30,16 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
 
   const setValue = useCallback(
     (value: T | ((prev: T) => T)) => {
-      setState(prev => {
-        const next = typeof value === 'function' ? (value as (p: T) => T)(prev) : value;
+      setState((prev) => {
+        const next =
+          typeof value === "function" ? (value as (p: T) => T)(prev) : value;
         try {
           window.localStorage.setItem(key, JSON.stringify(next));
           setError(undefined);
         } catch (e) {
-          setError(e instanceof Error ? e.message : 'Failed to write localStorage');
+          setError(
+            e instanceof Error ? e.message : "Failed to write localStorage"
+          );
         }
         return next as T;
       });
@@ -44,7 +50,11 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
   // Sync across tabs
   useEffect(() => {
     function handleStorage(ev: StorageEvent) {
-      if (ev.storageArea === window.localStorage && ev.key === key && ev.newValue) {
+      if (
+        ev.storageArea === window.localStorage &&
+        ev.key === key &&
+        ev.newValue
+      ) {
         try {
           const parsed = JSON.parse(ev.newValue) as T;
           // avoid echo on initial load
@@ -56,11 +66,9 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
         }
       }
     }
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, [key]);
 
   return [state, setValue, { error }];
 }
-
-
