@@ -59,7 +59,7 @@ function AppInner() {
       <div className="drawer-content">
         <TopBar onAdd={() => { setEditId(null); setOpenForm(true); }} onOpenDrawer={() => setDrawerOpen(true)} />
         <main className="px-4 pb-24">
-          <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-7xl p-5">
             <ContactList
               onEdit={(id) => { setEditId(id); setOpenForm(true); }}
               onRequestDelete={(id) => setOpenConfirm({ id })}
