@@ -58,7 +58,7 @@ export default function ContactForm({ open, onClose, initial }: ContactFormProps
 
   return (
     <dialog className="modal" open={open}>
-      <div className="modal-box">
+      <div className="modal-box max-w-md">
         <h3 className="font-bold text-lg">{initial ? 'Edit Contact' : 'Add Contact'}</h3>
 
         <div className="form-control mt-3">

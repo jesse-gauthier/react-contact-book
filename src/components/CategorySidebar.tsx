@@ -26,12 +26,12 @@ export default function CategorySidebar() {
   }
 
   return (
-    <aside className="w-full sm:w-64 p-4 border-r border-base-200">
+    <aside className="w-full sm:w-64 p-4 overflow-y-auto max-h-[calc(100dvh-4rem)]" aria-label="Category filters">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">Categories</h2>
-        <button className="btn btn-sm" onClick={() => setOpenManage(true)}>Manage</button>
+        <button className="btn btn-sm" onClick={() => setOpenManage(true)} aria-label="Manage categories">Manage</button>
       </div>
-      <ul className="menu">
+      <ul className="menu rounded-box bg-base-100 shadow-sm">
         <li>
             <button className={!activeCategoryId ? 'active' : ''} onClick={() => setActiveCategoryId(null)}>
             <span className="badge badge-outline mr-2">All</span>
